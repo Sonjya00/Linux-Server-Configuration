@@ -19,7 +19,7 @@ Take a baseline installation of a Linux server and prepare it to host a web appl
   - [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Vagrant](https://www.vagrantup.com/downloads.html) to work locally.
   - [Python](https://www.python.org/download/releases/3.0/) (latest version).
   - [PostgreSQL](https://www.postgresql.org/) as database server.
-  - [Apache2](http://httpd.apache.org/)
+  - [Apache2](http://httpd.apache.org/).
   - [Google OAuth](https://console.developers.google.com/apis).
 
 ## How to login/logout (for graders)
@@ -42,9 +42,9 @@ Take a baseline installation of a Linux server and prepare it to host a web appl
 
 #### SSH into the server
 
-- At this point, the instance can be accessed via the website (by clicking on "Connect using SSH").
+- At this point, the instance can be accessed via the Amazon Lightsail website (by clicking on "Connect using SSH").
 - To access it via the local terminal:
-  - Go to the Account page on the Amazon Lightsail website, and select the "SSH keys" tab.
+  - Go to the Account page on the website, and select the "SSH keys" tab.
   - Download the keys (default is pre-selected).
   - Rename the downloaded file `lightsail_key.rsa`, and move in the local folder `~/.ssh` (if there isn't, cd in the home directory and create the directory by inputing `mkdir .ssh`)
   - Type in the terminal `chmod 600 ~/.ssh/lightsail_key.rsa` to fix the file permissions.
@@ -55,11 +55,11 @@ Take a baseline installation of a Linux server and prepare it to host a web appl
 #### Update and upgrade installed packages
 
 - To update/upgrade installed packages:
-  - Input the commands `sudo apt-get update`,
+  - Input `sudo apt-get update`.
   - Input `sudo apt-get upgrade`.
-  - Input `sudo apt-get dist-upgrade`
+  - Input `sudo apt-get dist-upgrade`.
 - To enable automatic updates:
-  - install the [unattended-upgrades](https://help.ubuntu.com/lts/serverguide/automatic-updates.html) package with `sudo apt install unattended-upgrades`
+  - Install the [unattended-upgrades](https://help.ubuntu.com/lts/serverguide/automatic-updates.html) package with `sudo apt install unattended-upgrades`.
   - Input `sudo nano /etc/apt/apt.conf.d/50unattended-upgrades`, and uncomment the line `"${distro_id}:${distro_codename}-updates";`, then save the file.
   - Input `sudo nano /etc/apt/apt.conf.d/20auto-upgrades`, and change the file so that it is as follows:
     `APT::Periodic::Update-Package-Lists "1"; APT::Periodic::Download-Upgradeable-Packages "1"; APT::Periodic::AutocleanInterval "7"; APT::Periodic::Unattended-Upgrade "1";`
@@ -86,19 +86,19 @@ Take a baseline installation of a Linux server and prepare it to host a web appl
 
 #### Add the grader as sudoer
 
-- Add the grader user by inputing on the terminal `sudo adduser grader`.
+- Create the "grader" user by inputing on the terminal `sudo adduser grader`.
 - Set the password by inputing it twice.
 - To give sudo privileges to grader, create the file `/etc/sudoers.d/grader`.
-- Input `sudo nano /etc/sudoers.d/grader` and change the content of the file to: `grader ALL=(ALL:ALL) ALL`
+- Input `sudo nano /etc/sudoers.d/grader` and change the content of the file to: `grader ALL=(ALL:ALL) ALL`.
 
 #### Add SSH key for the grader
 
 - On the local machine:
-  - generate the key pair by using `ssh-keygen`.
-  - Enter file in which to save the key (I called the file "grader_key"), then move it to the local `~/.ssh/` directory.
+  - Generate the key pair by using `ssh-keygen`.
+  - Save the key in the file "grader_key", then move it to the local `~/.ssh/` directory.
   - Enter a passphrase twice.
   - This generates 2 files: `~/.ssh/grader_key` and `~/.ssh/grader_key.pub`.
-  - Input `cat .ssh/grader_key.pub` to read its content. Copy the content. This will be used on the next step.
+  - Input `cat .ssh/grader_key.pub` to read the content of the second file. Copy the content. This will be used on the next step.
 - On the server, logged as grader:
   - Create a new ssh directory in the home directory with `mkdir .ssh`.
   - Input `touch ssh/authorized_keys` to create the file.
@@ -112,12 +112,12 @@ Take a baseline installation of a Linux server and prepare it to host a web appl
 
 #### Configure the local timezone to UTC
 
-- Configure the timezone with the command `sudo dpkg-reconfigure tzdata`
+- Configure the timezone with the command `sudo dpkg-reconfigure tzdata`.
 - Select "None of the above", then "UTC".
 
 #### Install Apache
 
-- To install Apache, input `sudo apt-get install apache2`
+- To install Apache, input `sudo apt-get install apache2`.
 - Open http://18.232.104.248/ in the browser. If you see the Apache2 Ubuntu Default Page, this means that Apache is working correctly.
 - Install mod_wsgi with `sudo apt-get install libapache2-mod-wsgi`.
 - Enable mod_wsgi with the command `sudo a2enmod wsgi`.
@@ -135,7 +135,7 @@ Take a baseline installation of a Linux server and prepare it to host a web appl
 
 #### Create new catalog user
 
-- Create a new Linux user named "catalog" with the command `sudo adduser catalog`. Set the password by inputing it twice.
+- Create a new user named "catalog" with the command `sudo adduser catalog`. Set the password by inputing it twice.
 - To give the new catalog user sudo permissions, input `sudo visudo`, and add the line `catalog ALL=(ALL:ALL) ALL` under `root ALL=(ALL:ALL) ALL`, then save the file.
 - Enter the catalog user with `su - catalog`.
 - Create a database with `createdb catalog`.
@@ -156,7 +156,7 @@ Take a baseline installation of a Linux server and prepare it to host a web appl
 #### Create a new client_secrets.json file (Google OAuth)
 
 - Visit https://www.hcidata.info/host2ip.cgi
-- Input the IP address and get host name (https://www.hcidata.info/host2ip.cgi)
+- Input the IP address and get host name (http://ec2-18-232-104-248.compute-1.amazonaws.com/).
 - Go to the Google API Console.
 - From the left menu, select "API and Services", then "Credentials".
 - Click on the button "Create credentials", then select OAuth client ID" from the dropdown menu.
@@ -164,7 +164,7 @@ Take a baseline installation of a Linux server and prepare it to host a web appl
 - Download the JSON file.
 - Open it and copy its content.
 - On the terminal, while logged as grader, cd into `/var/www/catalog/catalog/`.
-- Create a new JSON file with `touch client_secrets.json`.
+- Create a new JSON file with the command `touch client_secrets.json`.
 - Open the new file with `nano client_secrets.json`, and paste the previously copied content, then save the file.
 
 #### Make changes to the original project files
@@ -249,6 +249,11 @@ Take a baseline installation of a Linux server and prepare it to host a web appl
 
 - Disable the default Apache site with the command `sudo a2dissite 000-default.conf`.
 - Reload Apache with `sudo service apache2 reload`.
+
+### 6. View the project online
+
+- The project can be viewed by visiting [http://18.232.104.248/](http://18.232.104.248/) or [http://ec2-18-232-104-248.compute-1.amazonaws.com/categories](http://ec2-18-232-104-248.compute-1.amazonaws.com/categories)
+- To check for errors, use the command `sudo tail /var/log/apache2/error.log`.
 
 ## Resources
 
