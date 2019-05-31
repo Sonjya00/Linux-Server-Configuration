@@ -104,7 +104,8 @@ Take a baseline installation of a Linux server and prepare it to host a web appl
   - Input `touch ssh/authorized_keys` to create the file.
   - Input `nano .ssh/authorized_keys` and paste the content previously copied from the local machine.
   - Fix the permissions of the .ssh directory and the ssh key file by inputing `chmod 700 .ssh` and `chmod 644 .ssh/authorized_keys`.
-  - Check if the password based login is disabled by inputing `sudo nano /etc/ssh/sshd_config`. If there is written `PasswordAuthentication yes`, change it to `PasswordAuthentication no`, then save the file.
+  - Check if the password based login is disabled by inputing `sudo nano /etc/ssh/sshd_config`. If there is written `PasswordAuthentication yes`, change it to `PasswordAuthentication no`.
+  - On the same file, check the option `PermitRootLogin`. In order to disable remote login as root, this should be set as follows: `PermitRootLogin no`. If it isn't, change that line.
   - Restart the service by inputing `sudo service ssh restart`.
 - Now it is possible to access the instance as grader with `ssh -i ~/.ssh/grader_key -p 2200 grader@18.232.104.248`.
 
